@@ -1,0 +1,10 @@
+{
+  "url": "http://funda.nl/koop/amsterdam",
+  "data": {
+    "base":        ".object-list li",
+    "url":         "a.object-street",
+    "title":       "a.object-street",
+    "description": ".properties-list",
+    "price":       ".price"
+  }
+}
