@@ -1,6 +1,6 @@
 var cheerio = require('cheerio');
 
-function extractData(html, config) {
+function extractData(html, config, baseUrl) {
 
     var $ = cheerio.load(html);
 
@@ -31,6 +31,10 @@ function extractData(html, config) {
       }
 
       var price = $(config.price, this).text().trim();
+
+      if (baseUrl && href.lastIndexOf('/', 0) === 0) {
+        href = baseUrl + href;
+      }
 
       //console.log(title + " - "+price+" ("+href+"): "+description)
       items.push({
