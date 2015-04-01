@@ -5,6 +5,8 @@
     "url":         "a.object-street",
     "title":       "a.object-street",
     "description": ".properties-list",
-    "price":       ".price"
+    "price":       ".price",
+    "category":    ".path-nav .type-list strong",
+    "img":         "img.object-images"
   }
 }
