@@ -5,7 +5,7 @@ function extractData(html, config, baseUrl) {
     var $ = cheerio.load(html);
 
     var items = [];
-    
+
     var category = '';
     if (config.category) {
         category = $(config.category).text().trim();
@@ -15,10 +15,10 @@ function extractData(html, config, baseUrl) {
       //fruits[i] = $(this).text();
       //console.log(elem);
       var a = $(config.url, this);
-      
+
       var href = a.attr('href');
       var title = a.text().trim();
-      
+
       var img = '';
       if (config.img) {
           var imgTag = $(config.img, this);
@@ -54,15 +54,32 @@ function extractData(html, config, baseUrl) {
         price: price,
         description: description
       };
-      
+
       if (category && category.length > 0) {
           hash['category'] = category;
       }
-      
+
       if (img && img.length > 0) {
           hash['img'] = img;
       }
-      
+
+      if (price.match(/-?\d+\.?\d*/)) {
+        var price_num = price.match(/-?\d+\.?\d*/)[0];
+        if (price_num && price_num > 0) {
+          hash['price_num'] = price_num;
+        }
+      }
+
+      if (description.match(/(\d+) m²/)) {
+        var size = description.match(/(\d+) m²/)[1];
+        //console.log('size', size);
+        if (size) {
+          hash['size'] = size;
+        }
+      }
+
+      //console.log(hash);
+
       items.push(hash);
     });
     return items;

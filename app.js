@@ -9,6 +9,8 @@ var elasticsearch = require('elasticsearch');
 var config = {};
 var crawlerData = [];
 
+var processedPaths = [];
+
 var status = {};
 function resetStatus() {
   status = {
@@ -23,7 +25,7 @@ function resetStatus() {
 var crawler;
 function setupCrawler() {
   crawler = new Crawler();
-  
+
   //crawler.host = url;
   crawler.filterByDomain = true;
   crawler.downloadUnsupported = false;
@@ -32,6 +34,14 @@ function setupCrawler() {
 
   var conditionID = crawler.addFetchCondition(function(parsedURL) {
         return !parsedURL.path.match(/\.(xml|js|json|css|pdf|woff|eot|png|jpg|jpeg|ico|gif|svg|ttf)$/i);
+  });
+
+  var fc2 = crawler.addFetchCondition(function(parsedURL) {
+    if (processedPaths.indexOf(parsedURL.path) >= 0) {
+      //console.log('Skipping ' + parsedURL.path);
+      return false;
+    }
+    return true;
   });
 
   crawler.on("crawlstart",function(){
@@ -46,11 +56,22 @@ function setupCrawler() {
     //console.log("Starting request for:", queueItem.url);
     });
   crawler.on("fetchcomplete", function(queueItem, responseBuffer){
+    var thisContinue = this.wait();
     status.processed += 1;
 
     var html = responseBuffer.toString();
     var data = extractData(html, config.data, config.baseUrl);
-    
+
+    //console.log(data);
+    data.forEach(function(item){
+      var parsedUrl = url.parse(item.url);
+      processedPaths.push(parsedUrl.path);
+    })
+
+
+    //foundURLs.forEach(crawler.queueURL.bind(crawler));
+    thisContinue();
+
     //crawlerData.push(data);
     indexElasticsearch(elastic_client, config.category, data, function(err){
       if (err) {
@@ -59,6 +80,7 @@ function setupCrawler() {
       } else {
         status.indexed += 1;
       }
+
     });
 
   });
@@ -112,11 +134,11 @@ function indexElasticsearch(client, index, data, callback) {
     body.push({index: {}});
     body.push(data[i]);
   }
-  
+
   client.bulk({
     index: index,
     type: type,
-    body: body 
+    body: body
       //[
       // action description
       //{ index:  { _index: 'myindex', _type: 'mytype', _id: 1 } },
@@ -124,7 +146,7 @@ function indexElasticsearch(client, index, data, callback) {
       //]
   }, function (err, resp) {
     callback(err)
-  }); 
+  });
 }
 
 var sOptions = {
@@ -139,7 +161,7 @@ var sOptions = {
 };
 
 var server = new Hapi.Server();
-var port = process.env.PORT || 3000; 
+var port = process.env.PORT || 3000;
 server.connection({ port: port});
 
 function getNext(callback) {
@@ -174,7 +196,7 @@ function startCrawler() {
   // Need to do this, othervise url will not be added
   var processedUrl = url.parse(config.url);
   config.baseUrl = processedUrl.protocol + '//' + processedUrl.host;
-  crawler.host = processedUrl.hostname; 
+  crawler.host = processedUrl.hostname;
 
   crawler.maxDepth = config.depth;
 
@@ -186,13 +208,13 @@ function startCrawler() {
 
 function handleNext(req, res) {
   getNext(function(data){
-    
+
     if (data) {
 
       setupElasticsearch(data.elastic);
       pingElasticsearch(elastic_client, function(ok){
-        if (!ok) { 
-          res({error: 'elastic search not responding'}).code(500); 
+        if (!ok) {
+          res({error: 'elastic search not responding'}).code(500);
           return;
         }
         res(data);
@@ -225,6 +247,5 @@ server.route([
 
 
 server.start(function () {
-  server.log('info', 'Server running at: ' + server.info.uri);
+  console.log('Server running at: ' + server.info.uri);
 });
-
