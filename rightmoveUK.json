@@ -6,6 +6,7 @@
     "title":       "span.displayaddress",
     "description": "a.description",
     "price":       ".price-new a",
+    "category":    "#numberOfProperties span",
     "img":         "img.fixedPic"
   }
 }
