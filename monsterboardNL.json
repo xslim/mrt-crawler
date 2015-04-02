@@ -1,0 +1,12 @@
+{
+  "url": "http://jobsearch.monsterboard.nl/vacatures/?q=Java&cy=nl&where=Amsterdam",
+  "data": {
+    "base":        ".listingsTable tbody tr",
+    "url":         "a.slJobTitle",
+    "title":       "a.slJobTitle",
+    "description": ".companyContainer",
+    "price":       ".fnt13",
+    "category":    ".fnt12",
+    "img":         "img.object-images"
+  }
+}
