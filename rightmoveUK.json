@@ -1,7 +1,7 @@
 {
   "url": "http://www.rightmove.co.uk/property-to-rent/East-London.html",
   "data": {
-    "base":        "#summaries li",
+    "base":        "ol#summaries li",
     "url":         ".price-new a",
     "title":       "span.displayaddress",
     "description": "a.description",

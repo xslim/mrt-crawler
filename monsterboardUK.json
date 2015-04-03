@@ -1,0 +1,12 @@
+{
+  "url": "http://jobsearch.monster.co.uk/jobs/?q=java&cy=uk&where=london",
+  "data": {
+    "base":        ".listingsTable tbody tr",
+    "url":         "a.slJobTitle",
+    "title":       "a.slJobTitle",
+    "description": ".companyContainer",
+    "price":       ".fnt13",
+    "category":    ".fnt12",
+    "img":         "img.object-images"
+  }
+}
