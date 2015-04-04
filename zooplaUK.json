@@ -1,0 +1,12 @@
+{
+  "url": "http://www.zoopla.co.uk/to-rent/property/london/",
+  "data": {
+    "base":        ".listing-results li",
+    "url":         ".listing-results-price",
+    "title":       ".listing-results-address",
+    "description": ".listing_sort_copy",
+    "price":       ".listing-results-price",
+    "category":    "div#content h1",
+    "img":         "a.photo-hover img"
+  }
+}

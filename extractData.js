@@ -60,12 +60,21 @@ function extractData(html, config, baseUrl) {
             hash['img'] = img;
         }
 
-        if (price.match(/-?\d+\.?\d*/)) {
-          var price_num = price.match(/-?\d+\.?\d*/)[0];
+        if (price.match(/-?\d+(\.?|\,?)\d*/)) {
+          price = price.replace(/,/g, '.');
+          var price_num = price.match(/-?\d+(\.?|\,?)\d*/)[0];
           if (price_num && price_num > 0) {
             hash['price_num'] = price_num;
           }
         }
+
+        // if (price.match(/^(?!0\.00)\d{1,3}(,\d{3})*(\.\d\d)?$/)) {
+        //   var price_num = price.match(/^(?!0\.00)\d{1,3}(,\d{3})*(\.\d\d)?$/);
+        //   console.log(price_num);
+        //   if (price_num && price_num > 0) {
+        //     hash['price_num'] = price_num;
+        //   }
+        // }
 
         if (description.match(/(\d+) m²/)) {
           var size = description.match(/(\d+) m²/)[1];
