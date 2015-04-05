@@ -61,10 +61,18 @@ function extractData(html, config, baseUrl) {
         }
 
         if (price.match(/-?\d+(\.?|\,?)\d*/)) {
-          price = price.replace(/,/g, '.');
-          var price_num = price.match(/-?\d+(\.?|\,?)\d*/)[0];
-          if (price_num && price_num > 0) {
-            hash['price_num'] = price_num;
+          if(price.indexOf(",") > 0) {
+            price = price.replace(/,/g, "");
+          }
+          if(price.indexOf("\.") > 0) {
+            price = price.replace(/\./g, "");
+          }
+          console.log("=======> " + price);
+          if(price) {
+            var price_num = Number(price.match(/\d+/g)[0]);
+            if (price_num && price_num > 0) {
+              hash['price_num'] = price_num;
+            }
           }
         }
 

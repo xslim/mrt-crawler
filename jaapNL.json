@@ -1,0 +1,12 @@
+{
+  "url": "http://www.jaap.nl/koophuizen/noord+holland/groot-amsterdam/amsterdam",
+  "data": {
+    "base":        ".property-list div",
+    "url":         "a.property-inner",
+    "title":       "h2.property-address-street",
+    "description": ".property-address-zipcity",
+    "price":       ".property-price",
+    "category":    "h1.result-title",
+    "img":         ".property-photo img"
+  }
+}
